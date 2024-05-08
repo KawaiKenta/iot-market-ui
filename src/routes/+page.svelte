@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Card from '$lib/components/Card.svelte';
-
 	const { data } = $props();
 </script>
 
