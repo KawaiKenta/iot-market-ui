@@ -4,29 +4,15 @@
 	import { Merchandise__factory } from '../../../types/typechain-types/index.js';
 	import Inprogress from '$lib/assets/inprogress.png';
 	import Sold from '$lib/assets/soldout.png';
+	import { ethAccountStore } from '$lib/store/ethAccountStore.svelte.js';
 	const { data } = $props();
 	let purchaseStatus = $state();
-
-	// FIXME: defined in +layout.svelte
-	const connectToMetaMask = async () => {
-		const windowProvider = window.ethereum;
-
-		if (windowProvider == null) {
-			throw new Error('MetaMask not found');
-		}
-		try {
-			const provider = await new ethers.BrowserProvider(windowProvider);
-			const signer = await provider.getSigner();
-			return { provider, signer };
-		} catch (error) {
-			throw new Error('Error while connecting to MetaMask');
-		}
-	};
+	const accountStore = ethAccountStore();
 
 	const purchase = async () => {
-		const { provider, signer } = await connectToMetaMask();
-		const merchandise = Merchandise__factory.connect(data.address, signer);
-		if (signer) {
+		await accountStore.connectToMetaMask();
+		const merchandise = Merchandise__factory.connect(data.address, accountStore.acount.signer!);
+		if (accountStore.acount.signer) {
 			try {
 				const transactionResponse = await merchandise.purchase({
 					value: ethers.parseEther(data.price)
@@ -35,8 +21,13 @@
 				await purchaseStatus;
 				alert('Purchased is Confirmed!\nWe will reload the page to update the status');
 				location.reload();
-			} catch (err: unknown) {
-				throw new Error((err as Error).message);
+			} catch (err) {
+				if (err instanceof Error) {
+					alert(`Error while purchasing: ${err.message}`);
+					throw new Error(err.message);
+				} else {
+					alert(`Error while purchasing: ${err}`);
+				}
 			}
 		} else {
 			throw new Error('Please connect to MetaMask First');

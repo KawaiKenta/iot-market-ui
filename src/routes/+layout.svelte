@@ -1,24 +1,9 @@
 <script lang="ts">
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.png';
-	import { ethers } from 'ethers';
-	let provider: ethers.BrowserProvider | undefined = $state();
-	let signer: ethers.JsonRpcSigner | undefined = $state();
+	import { ethAccountStore } from '$lib/store/ethAccountStore.svelte';
 
-	const connectToMetaMask = async () => {
-		const windowProvider = window.ethereum;
-
-		if (windowProvider == null) {
-			throw new Error('MetaMask not found');
-		}
-		try {
-			const provider = await new ethers.BrowserProvider(windowProvider);
-			const signer = await provider.getSigner();
-			return { provider, signer };
-		} catch (error) {
-			throw new Error('Error while connecting to MetaMask');
-		}
-	};
+	const accountStore = ethAccountStore();
 
 	const toggleMenu = () => {
 		const menu = document.getElementById('menu')!;
@@ -57,21 +42,16 @@
 				</svg>
 			</button>
 			<!-- md: connect button -->
-			{#if signer}
+			{#if accountStore.acount.signer}
 				<p class="my-2 mr-2 hidden md:block">
-					Welcome! <span class="text-blue-500">{signer.address}</span>
+					Welcome! <span class="text-blue-500">{accountStore.acount.signer.address}</span>
 				</p>
 			{:else}
 				<button
 					on:click={() => {
-						connectToMetaMask()
-							.then((res) => {
-								provider = res.provider;
-								signer = res.signer;
-							})
-							.catch((error) => {
-								alert(`Error: ${error.message}\nPlease install MetaMask and try again.`);
-							});
+						accountStore.connectToMetaMask().catch((error) => {
+							alert(`Error: ${error.message}\nPlease install MetaMask and try again.`);
+						});
 					}}
 					class="gradiant hidden rounded-lg px-4 py-2 text-white shadow-lg md:block"
 				>
@@ -83,22 +63,17 @@
 </header>
 <!-- toggle menu -->
 <div class="hidden text-lg text-gray-300 shadow-sm shadow-indigo-500/50 md:hidden" id="menu">
-	{#if signer}
+	{#if accountStore.acount.signer}
 		<div class=" border-y border-gray-700 py-2 pl-4">
-			Accout: <span class="text-sm text-blue-500">{signer.address}</span>
+			Accout: <span class="text-sm text-blue-500">{accountStore.acount.signer.address}</span>
 		</div>
 	{:else}
 		<button
 			class="block border-y border-gray-700 py-2 pl-4 hover:cursor-pointer hover:text-purple-400"
 			on:click={() => {
-				connectToMetaMask()
-					.then((res) => {
-						provider = res.provider;
-						signer = res.signer;
-					})
-					.catch((error) => {
-						alert(`Error: ${error.message}\nPlease install MetaMask and try again.`);
-					});
+				accountStore.connectToMetaMask().catch((error) => {
+					alert(`Error: ${error.message}\nPlease install MetaMask and try again.`);
+				});
 			}}
 		>
 			Connect your Wallet
