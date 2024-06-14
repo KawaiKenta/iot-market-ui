@@ -26,6 +26,7 @@ export interface MerchandiseInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "RETRY_LIMIT"
+      | "emitUpload"
       | "getDataHash"
       | "getOwner"
       | "getPrice"
@@ -44,12 +45,15 @@ export interface MerchandiseInterface extends Interface {
       | "withdraw"
   ): FunctionFragment;
 
-  getEvent(nameOrSignatureOrTopic: "Purchase" | "Verify"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "Purchase" | "Upload" | "Verify"
+  ): EventFragment;
 
   encodeFunctionData(
     functionFragment: "RETRY_LIMIT",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "emitUpload", values: [string]): string;
   encodeFunctionData(
     functionFragment: "getDataHash",
     values?: undefined
@@ -98,6 +102,7 @@ export interface MerchandiseInterface extends Interface {
     functionFragment: "RETRY_LIMIT",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "emitUpload", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getDataHash",
     data: BytesLike
@@ -149,6 +154,24 @@ export namespace PurchaseEvent {
   export interface OutputObject {
     owner: string;
     buyer: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace UploadEvent {
+  export type InputTuple = [
+    owner: AddressLike,
+    buyer: AddressLike,
+    uri: string
+  ];
+  export type OutputTuple = [owner: string, buyer: string, uri: string];
+  export interface OutputObject {
+    owner: string;
+    buyer: string;
+    uri: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -219,6 +242,8 @@ export interface Merchandise extends BaseContract {
 
   RETRY_LIMIT: TypedContractMethod<[], [bigint], "view">;
 
+  emitUpload: TypedContractMethod<[encryptURI: string], [void], "nonpayable">;
+
   getDataHash: TypedContractMethod<[], [string], "view">;
 
   getOwner: TypedContractMethod<[], [string], "view">;
@@ -255,7 +280,7 @@ export interface Merchandise extends BaseContract {
 
   s_trialCount: TypedContractMethod<[], [bigint], "view">;
 
-  verify: TypedContractMethod<[dataHash: BytesLike], [void], "nonpayable">;
+  verify: TypedContractMethod<[dataHash: BytesLike], [boolean], "nonpayable">;
 
   withdraw: TypedContractMethod<[], [void], "nonpayable">;
 
@@ -266,6 +291,9 @@ export interface Merchandise extends BaseContract {
   getFunction(
     nameOrSignature: "RETRY_LIMIT"
   ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "emitUpload"
+  ): TypedContractMethod<[encryptURI: string], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "getDataHash"
   ): TypedContractMethod<[], [string], "view">;
@@ -310,7 +338,7 @@ export interface Merchandise extends BaseContract {
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "verify"
-  ): TypedContractMethod<[dataHash: BytesLike], [void], "nonpayable">;
+  ): TypedContractMethod<[dataHash: BytesLike], [boolean], "nonpayable">;
   getFunction(
     nameOrSignature: "withdraw"
   ): TypedContractMethod<[], [void], "nonpayable">;
@@ -321,6 +349,13 @@ export interface Merchandise extends BaseContract {
     PurchaseEvent.InputTuple,
     PurchaseEvent.OutputTuple,
     PurchaseEvent.OutputObject
+  >;
+  getEvent(
+    key: "Upload"
+  ): TypedContractEvent<
+    UploadEvent.InputTuple,
+    UploadEvent.OutputTuple,
+    UploadEvent.OutputObject
   >;
   getEvent(
     key: "Verify"
@@ -340,6 +375,17 @@ export interface Merchandise extends BaseContract {
       PurchaseEvent.InputTuple,
       PurchaseEvent.OutputTuple,
       PurchaseEvent.OutputObject
+    >;
+
+    "Upload(address,address,string)": TypedContractEvent<
+      UploadEvent.InputTuple,
+      UploadEvent.OutputTuple,
+      UploadEvent.OutputObject
+    >;
+    Upload: TypedContractEvent<
+      UploadEvent.InputTuple,
+      UploadEvent.OutputTuple,
+      UploadEvent.OutputObject
     >;
 
     "Verify(address,address,bool)": TypedContractEvent<
