@@ -1,5 +1,5 @@
 # builder image
-FROM node:slim AS builder
+FROM node:latest AS builder
 
 WORKDIR /app
 
