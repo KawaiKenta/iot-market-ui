@@ -11,6 +11,11 @@ export const abi = [
                 "internalType": "bytes32",
                 "name": "dataHash",
                 "type": "bytes32"
+            },
+            {
+                "internalType": "contract PubKey",
+                "name": "pubKey",
+                "type": "address"
             }
         ],
         "stateMutability": "nonpayable",
@@ -70,6 +75,12 @@ export const abi = [
                 "internalType": "address",
                 "name": "buyer",
                 "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "pubkey",
+                "type": "string"
             }
         ],
         "name": "Purchase",
@@ -91,7 +102,7 @@ export const abi = [
                 "type": "address"
             },
             {
-                "indexed": true,
+                "indexed": false,
                 "internalType": "string",
                 "name": "uri",
                 "type": "string"
@@ -205,6 +216,19 @@ export const abi = [
     },
     {
         "inputs": [],
+        "name": "getPubKeyAddress",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "getRetryLimit",
         "outputs": [
             {
@@ -232,19 +256,6 @@ export const abi = [
     {
         "inputs": [],
         "name": "getTrialCount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "i_price",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -308,32 +319,6 @@ export const abi = [
                 "internalType": "enum Merchandise.MerchandiseState",
                 "name": "",
                 "type": "uint8"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "s_progressBuyer",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "s_trialCount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
             }
         ],
         "stateMutability": "view",

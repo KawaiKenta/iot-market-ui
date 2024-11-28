@@ -1,29 +1,6 @@
 export const contractAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 export const abi = [
     {
-        "inputs": [],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "price",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "dataHash",
-                "type": "bytes32"
-            }
-        ],
-        "name": "deployMerchandise",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -53,6 +30,19 @@ export const abi = [
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract Merchandise",
+                "name": "merchandise",
+                "type": "address"
+            }
+        ],
+        "name": "registerMerchandise",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {

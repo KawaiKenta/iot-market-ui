@@ -11,7 +11,13 @@ export const abi = [
         "type": "error"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "who",
+                "type": "address"
+            }
+        ],
         "name": "getPubKey",
         "outputs": [
             {
