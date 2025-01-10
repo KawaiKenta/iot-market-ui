@@ -3,6 +3,8 @@
 /* eslint-disable */
 export type { IoTMarket } from "./IoTMarket";
 export type { Merchandise } from "./Merchandise";
+export type { PubKey } from "./PubKey";
 export * as factories from "./factories";
 export { IoTMarket__factory } from "./factories/IoTMarket__factory";
 export { Merchandise__factory } from "./factories/Merchandise__factory";
+export { PubKey__factory } from "./factories/PubKey__factory";

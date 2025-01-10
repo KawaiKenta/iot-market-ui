@@ -3,3 +3,4 @@
 /* eslint-disable */
 export { IoTMarket__factory } from "./IoTMarket__factory";
 export { Merchandise__factory } from "./Merchandise__factory";
+export { PubKey__factory } from "./PubKey__factory";

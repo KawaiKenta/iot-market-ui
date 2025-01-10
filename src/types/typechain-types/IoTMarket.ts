@@ -8,6 +8,7 @@ import type {
   FunctionFragment,
   Result,
   Interface,
+  AddressLike,
   ContractRunner,
   ContractMethod,
   Listener,
@@ -23,16 +24,12 @@ import type {
 export interface IoTMarketInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "deployMerchandise"
       | "getMerchandise"
       | "getMerchandises"
+      | "registerMerchandise"
       | "s_merchandises"
   ): FunctionFragment;
 
-  encodeFunctionData(
-    functionFragment: "deployMerchandise",
-    values: [BigNumberish, BytesLike]
-  ): string;
   encodeFunctionData(
     functionFragment: "getMerchandise",
     values: [BigNumberish]
@@ -42,20 +39,24 @@ export interface IoTMarketInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "registerMerchandise",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "s_merchandises",
     values: [BigNumberish]
   ): string;
 
-  decodeFunctionResult(
-    functionFragment: "deployMerchandise",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "getMerchandise",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getMerchandises",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "registerMerchandise",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -107,15 +108,15 @@ export interface IoTMarket extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  deployMerchandise: TypedContractMethod<
-    [price: BigNumberish, dataHash: BytesLike],
-    [void],
-    "nonpayable"
-  >;
-
   getMerchandise: TypedContractMethod<[index: BigNumberish], [string], "view">;
 
   getMerchandises: TypedContractMethod<[], [string[]], "view">;
+
+  registerMerchandise: TypedContractMethod<
+    [merchandise: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
   s_merchandises: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
 
@@ -124,18 +125,14 @@ export interface IoTMarket extends BaseContract {
   ): T;
 
   getFunction(
-    nameOrSignature: "deployMerchandise"
-  ): TypedContractMethod<
-    [price: BigNumberish, dataHash: BytesLike],
-    [void],
-    "nonpayable"
-  >;
-  getFunction(
     nameOrSignature: "getMerchandise"
   ): TypedContractMethod<[index: BigNumberish], [string], "view">;
   getFunction(
     nameOrSignature: "getMerchandises"
   ): TypedContractMethod<[], [string[]], "view">;
+  getFunction(
+    nameOrSignature: "registerMerchandise"
+  ): TypedContractMethod<[merchandise: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "s_merchandises"
   ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;

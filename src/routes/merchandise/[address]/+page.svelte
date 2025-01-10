@@ -1,5 +1,5 @@
 <script lang="ts">
-	import productImage from '$lib/assets/m5stack.jpg';
+	import productImage from '$lib/assets/raspberryPi.jpg';
 	import { ethers } from 'ethers';
 	import { Merchandise__factory } from '../../../types/typechain-types/index.js';
 	import Inprogress from '$lib/assets/inprogress.png';
@@ -64,12 +64,36 @@
 			{/if}
 		</div>
 		<div class="py-6 md:w-1/2 md:p-4">
-			<h2 class="text-2xl font-bold">M5Stack Temprature</h2>
-			<p class="py-2 text-gray-400">
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam, illo nihil sapiente nemo
-				molestias earum eaque totam quidem perferendis reprehenderit nisi autem ad eum doloribus
-				debitis culpa, sint laudantium maxime.
-			</p>
+			<h2 class="text-2xl font-bold">RaspberryPi 加工データ</h2>
+			<div class="py-2 text-gray-200">
+				<p>
+					This dataset is derived from video data captured by a camera module installed on a
+					Raspberry Pi 4 in the Takada-Matsubara Laboratory. It includes the following three types
+					of data:
+				</p>
+
+				<p class="p-2">
+					1. <strong>Compressed Video Data</strong><br />
+					2. <strong>Thumbnail Images</strong><br />
+					3. <strong>Human Recognition Results Processed by YOLOv5</strong>
+				</p>
+
+				<p>Access to each type of data is restricted based on the following conditions:</p>
+
+				<p class="p-2">
+					- <strong>Video Data</strong>: Accessible only to the faculty members of the laboratory<br
+					/>
+					- <strong>Thumbnail Images</strong>: Accessible to faculty members, laboratory students,
+					and the secretary<br />
+					- <strong>Recognition Results</strong>: Accessible to anyone
+				</p>
+
+				<p>
+					Please note that this is experimental test data, and its accuracy is not guaranteed. Thank
+					you for your understanding.
+				</p>
+			</div>
+
 			<p class="mt-4 text-lg font-bold">
 				Price: <span class="text-purple-400">{data.price}</span> ETH
 			</p>
@@ -98,6 +122,9 @@
 				<p>Owner: {data.owner}</p>
 				<p>Retry Limit: {data.retryLimit}</p>
 				<p>State: {data.state}</p>
+				{#each data.additionalInfo as { key, value }}
+					<p>{key}: {value}</p>
+				{/each}
 			</div>
 		</div>
 	</div>
