@@ -46,7 +46,7 @@
 
 <section id="detail" class="container mx-auto mt-4 px-4">
 	<div class="flex flex-col md:flex-row">
-		<div class="relative md:w-1/2">
+		<div class="relative flex items-center md:w-1/2">
 			<img src={productImage} alt="M5Stack" class="w-full rounded-lg" />
 			<!-- 上に重ねる -->
 			{#if data.state === 1n}
