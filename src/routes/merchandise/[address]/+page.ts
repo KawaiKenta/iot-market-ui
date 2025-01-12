@@ -10,14 +10,15 @@ export const load: PageLoad = async ({ params }) => {
         provider = ethers.getDefaultProvider(CLIENT_SIDE_RPC_PROVIDER);
     }
     const address = params.address;
-    const merchandisies = Merchandise__factory.connect(address, provider);
-    const price = await merchandisies.getPrice().then((price) => ethers.formatEther(price));
+    const merchandise = Merchandise__factory.connect(address, provider);
+    const price = await merchandise.getPrice().then((price) => ethers.formatEther(price));
     const clientData = {
-        retryLimit: await merchandisies.getRetryLimit(),
-        owner: await merchandisies.getOwner(),
+        retryLimit: await merchandise.getRetryLimit(),
+        owner: await merchandise.getOwner(),
         price: price,
-        address: await merchandisies.getAddress(),
-        state: await merchandisies.getState(),
+        address: await merchandise.getAddress(),
+        state: await merchandise.getState(),
+        additionalInfo: await merchandise.getAllAdditionalInfo()
     };
 
     return clientData;

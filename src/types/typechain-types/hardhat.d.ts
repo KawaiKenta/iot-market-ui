@@ -21,6 +21,10 @@ declare module "hardhat/types/runtime" {
       name: "Merchandise",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Merchandise__factory>;
+    getContractFactory(
+      name: "PubKey",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PubKey__factory>;
 
     getContractAt(
       name: "IoTMarket",
@@ -32,6 +36,11 @@ declare module "hardhat/types/runtime" {
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.Merchandise>;
+    getContractAt(
+      name: "PubKey",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PubKey>;
 
     deployContract(
       name: "IoTMarket",
@@ -41,6 +50,10 @@ declare module "hardhat/types/runtime" {
       name: "Merchandise",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Merchandise>;
+    deployContract(
+      name: "PubKey",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.PubKey>;
 
     deployContract(
       name: "IoTMarket",
@@ -52,6 +65,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Merchandise>;
+    deployContract(
+      name: "PubKey",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.PubKey>;
 
     // default types
     getContractFactory(

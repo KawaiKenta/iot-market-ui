@@ -22,25 +22,31 @@ import type {
   TypedContractMethod,
 } from "./common";
 
+export type KeyValuePairStruct = { key: string; value: string };
+
+export type KeyValuePairStructOutput = [key: string, value: string] & {
+  key: string;
+  value: string;
+};
+
 export interface MerchandiseInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "RETRY_LIMIT"
       | "emitUpload"
+      | "getAllAdditionalInfo"
       | "getDataHash"
       | "getOwner"
       | "getPrice"
       | "getProgressBuyer"
+      | "getPubKeyAddress"
       | "getRetryLimit"
       | "getState"
       | "getTrialCount"
-      | "i_price"
       | "isConfirmedBuyer"
       | "purchase"
       | "s_confirmedBuyers"
       | "s_merchandiseState"
-      | "s_progressBuyer"
-      | "s_trialCount"
       | "verify"
       | "withdraw"
   ): FunctionFragment;
@@ -55,6 +61,10 @@ export interface MerchandiseInterface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: "emitUpload", values: [string]): string;
   encodeFunctionData(
+    functionFragment: "getAllAdditionalInfo",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getDataHash",
     values?: undefined
   ): string;
@@ -62,6 +72,10 @@ export interface MerchandiseInterface extends Interface {
   encodeFunctionData(functionFragment: "getPrice", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getProgressBuyer",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPubKeyAddress",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -73,7 +87,6 @@ export interface MerchandiseInterface extends Interface {
     functionFragment: "getTrialCount",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "i_price", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "isConfirmedBuyer",
     values: [AddressLike]
@@ -87,14 +100,6 @@ export interface MerchandiseInterface extends Interface {
     functionFragment: "s_merchandiseState",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "s_progressBuyer",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "s_trialCount",
-    values?: undefined
-  ): string;
   encodeFunctionData(functionFragment: "verify", values: [BytesLike]): string;
   encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
 
@@ -103,6 +108,10 @@ export interface MerchandiseInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "emitUpload", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getAllAdditionalInfo",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getDataHash",
     data: BytesLike
@@ -114,6 +123,10 @@ export interface MerchandiseInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getPubKeyAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getRetryLimit",
     data: BytesLike
   ): Result;
@@ -122,7 +135,6 @@ export interface MerchandiseInterface extends Interface {
     functionFragment: "getTrialCount",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "i_price", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isConfirmedBuyer",
     data: BytesLike
@@ -136,24 +148,21 @@ export interface MerchandiseInterface extends Interface {
     functionFragment: "s_merchandiseState",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "s_progressBuyer",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "s_trialCount",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "verify", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 }
 
 export namespace PurchaseEvent {
-  export type InputTuple = [owner: AddressLike, buyer: AddressLike];
-  export type OutputTuple = [owner: string, buyer: string];
+  export type InputTuple = [
+    owner: AddressLike,
+    buyer: AddressLike,
+    pubkey: string
+  ];
+  export type OutputTuple = [owner: string, buyer: string, pubkey: string];
   export interface OutputObject {
     owner: string;
     buyer: string;
+    pubkey: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -244,6 +253,12 @@ export interface Merchandise extends BaseContract {
 
   emitUpload: TypedContractMethod<[encryptURI: string], [void], "nonpayable">;
 
+  getAllAdditionalInfo: TypedContractMethod<
+    [],
+    [KeyValuePairStructOutput[]],
+    "view"
+  >;
+
   getDataHash: TypedContractMethod<[], [string], "view">;
 
   getOwner: TypedContractMethod<[], [string], "view">;
@@ -252,13 +267,13 @@ export interface Merchandise extends BaseContract {
 
   getProgressBuyer: TypedContractMethod<[], [string], "view">;
 
+  getPubKeyAddress: TypedContractMethod<[], [string], "view">;
+
   getRetryLimit: TypedContractMethod<[], [bigint], "view">;
 
   getState: TypedContractMethod<[], [bigint], "view">;
 
   getTrialCount: TypedContractMethod<[], [bigint], "view">;
-
-  i_price: TypedContractMethod<[], [bigint], "view">;
 
   isConfirmedBuyer: TypedContractMethod<
     [buyer: AddressLike],
@@ -276,10 +291,6 @@ export interface Merchandise extends BaseContract {
 
   s_merchandiseState: TypedContractMethod<[], [bigint], "view">;
 
-  s_progressBuyer: TypedContractMethod<[], [string], "view">;
-
-  s_trialCount: TypedContractMethod<[], [bigint], "view">;
-
   verify: TypedContractMethod<[dataHash: BytesLike], [boolean], "nonpayable">;
 
   withdraw: TypedContractMethod<[], [void], "nonpayable">;
@@ -295,6 +306,9 @@ export interface Merchandise extends BaseContract {
     nameOrSignature: "emitUpload"
   ): TypedContractMethod<[encryptURI: string], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "getAllAdditionalInfo"
+  ): TypedContractMethod<[], [KeyValuePairStructOutput[]], "view">;
+  getFunction(
     nameOrSignature: "getDataHash"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
@@ -307,6 +321,9 @@ export interface Merchandise extends BaseContract {
     nameOrSignature: "getProgressBuyer"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
+    nameOrSignature: "getPubKeyAddress"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "getRetryLimit"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
@@ -314,9 +331,6 @@ export interface Merchandise extends BaseContract {
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "getTrialCount"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "i_price"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "isConfirmedBuyer"
@@ -329,12 +343,6 @@ export interface Merchandise extends BaseContract {
   ): TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
   getFunction(
     nameOrSignature: "s_merchandiseState"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "s_progressBuyer"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "s_trialCount"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "verify"
@@ -366,7 +374,7 @@ export interface Merchandise extends BaseContract {
   >;
 
   filters: {
-    "Purchase(address,address)": TypedContractEvent<
+    "Purchase(address,address,string)": TypedContractEvent<
       PurchaseEvent.InputTuple,
       PurchaseEvent.OutputTuple,
       PurchaseEvent.OutputObject

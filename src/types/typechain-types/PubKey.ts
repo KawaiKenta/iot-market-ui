@@ -7,6 +7,7 @@ import type {
   FunctionFragment,
   Result,
   Interface,
+  AddressLike,
   ContractRunner,
   ContractMethod,
   Listener,
@@ -22,7 +23,10 @@ import type {
 export interface PubKeyInterface extends Interface {
   getFunction(nameOrSignature: "getPubKey" | "registerKey"): FunctionFragment;
 
-  encodeFunctionData(functionFragment: "getPubKey", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getPubKey",
+    values: [AddressLike]
+  ): string;
   encodeFunctionData(functionFragment: "registerKey", values: [string]): string;
 
   decodeFunctionResult(functionFragment: "getPubKey", data: BytesLike): Result;
@@ -75,7 +79,7 @@ export interface PubKey extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  getPubKey: TypedContractMethod<[], [string], "view">;
+  getPubKey: TypedContractMethod<[who: AddressLike], [string], "view">;
 
   registerKey: TypedContractMethod<[pubKey: string], [void], "nonpayable">;
 
@@ -85,7 +89,7 @@ export interface PubKey extends BaseContract {
 
   getFunction(
     nameOrSignature: "getPubKey"
-  ): TypedContractMethod<[], [string], "view">;
+  ): TypedContractMethod<[who: AddressLike], [string], "view">;
   getFunction(
     nameOrSignature: "registerKey"
   ): TypedContractMethod<[pubKey: string], [void], "nonpayable">;

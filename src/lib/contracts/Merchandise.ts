@@ -16,10 +16,30 @@ export const abi = [
                 "internalType": "contract PubKey",
                 "name": "pubKey",
                 "type": "address"
+            },
+            {
+                "internalType": "address[]",
+                "name": "accessDeniedAddresses",
+                "type": "address[]"
+            },
+            {
+                "internalType": "string[]",
+                "name": "additionalInfoKeys",
+                "type": "string[]"
+            },
+            {
+                "internalType": "string[]",
+                "name": "additionalInfoValues",
+                "type": "string[]"
             }
         ],
         "stateMutability": "nonpayable",
         "type": "constructor"
+    },
+    {
+        "inputs": [],
+        "name": "Merchandise__AccessDenied",
+        "type": "error"
     },
     {
         "inputs": [],
@@ -160,6 +180,31 @@ export const abi = [
         "name": "emitUpload",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getAllAdditionalInfo",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "string",
+                        "name": "key",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "value",
+                        "type": "string"
+                    }
+                ],
+                "internalType": "struct KeyValuePair[]",
+                "name": "",
+                "type": "tuple[]"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
